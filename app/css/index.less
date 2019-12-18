@@ -4,7 +4,7 @@
   width: 2px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #000;
+//   background: #000;
 }
 .albumPanel {
   position: relative;
@@ -51,7 +51,6 @@
 }
 .albumPanel .album img {
   border: none;
-  width: 100%;
 }
 .albumPanel .album .a-cont,
 .albumPanel .album .a-cover {
@@ -67,6 +66,10 @@
 .albumPanel .album .a-cover {
   opacity: 1;
 }
+.albumPanel .album .a-cover  {
+	opacity: 1;
+	width: 100%;
+  }
 .albumPanel .album .a-cont {
   opacity: 0;
 }
@@ -222,11 +225,10 @@
   -ms-transform: none;
 }
 .albumPanel .w1 {
-  width: 190px;
-  height: 240px;
+  width: 3rem;
 }
 .albumPanel .w1 img {
-  width: 190px;
+  width: 100%;
 }
 .albumPanel .w1 .al-brand {
   padding-top: 3px;

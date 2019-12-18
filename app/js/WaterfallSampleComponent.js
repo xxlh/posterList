@@ -58,31 +58,32 @@ class WaterfallSampleComponent extends React.Component {
 		  containerWidth: document.documentElement.clientWidth,
 		  containerHeight : this.state.height,
 		  itemClassName: 'item',
-		  gridWidth: 50,
+		  gridWidth: 100,
 		  transitionDuration: '.5'
 		};
 	  }
 	render() {
 	  return (
-		<AutoResponsive ref="container" {...this.getAutoResponsiveProps()}>
-		  {
-			this.state.article.map(function(i,index) {
-				let style = {
-				  width: '3rem',
-				  height:'3rem'
-				};
-				return (
-				  <a key={index} href="#" className={`album item`} style={style}>
-					<img className="a-cover" src={i.imgurl}/>
-					<p className="a-layer">
-					  <span className="al-title">{i.title}</span>
-					</p>
-					<p className="a-more j_ALMore"></p>
-				  </a>
-				);
-			  })
-		  }
-		</AutoResponsive>
+		<div className="albumPanel">
+			<AutoResponsive ref="container" {...this.getAutoResponsiveProps()}>
+			{
+				this.state.article.map(function(i,index) {
+					let style = {
+						width: '3rem',
+						height: 200
+					};
+					return (
+						<div key={index}  className={`w1 album item`} style={style}>
+						<img className="a-cover" src={i.imgurl}/>
+						<p className="a-layer">
+							<span className="al-title">{i.title}</span>
+						</p>
+						</div>
+					);
+					})
+			}
+			</AutoResponsive>
+		</div>
 	  );
 	}
   }
