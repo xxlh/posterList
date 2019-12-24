@@ -28,6 +28,8 @@ class WaterfallSampleComponent extends React.Component {
 			total:0,
 			isLoading: true,
 			refreshing: true,
+			refreshing: false,
+			down: true,
 			hasMore: true,
 			height: document.documentElement.clientHeight * 2 / 3,
 		};
@@ -73,7 +75,27 @@ class WaterfallSampleComponent extends React.Component {
 		})
         
 	}
-	
+	onRefresh = () => {
+		this.setState({
+			page : 1 ,
+			searchkeyword : "" ,
+		  //   hotKeyword : "" ,
+		},() => this.getData(this.state.page, this.state.hotKeyword));
+  };
+
+  onEndReached = (event) => {
+	  if (!this.state.hasMore) {
+		  return;
+	  }
+	  let page = this.state.page + 1;
+	  this.setState({ isLoading: false });
+	  this.setState({page: this.state.page + 1},
+		  ()=>{ console.log("page:" + this.state.page)
+			  this.getData(this.state.page, this.state.hotKeyword)});
+			  console.log("page:" + this.state.page);
+			  this.getData(this.state.page, this.state.hotKeyword)
+	}
+  
 	componentDidMount() {
 		this.getData(1, this.state.hotKeyword);
 	  }
@@ -83,7 +105,7 @@ class WaterfallSampleComponent extends React.Component {
 		  containerWidth: document.documentElement.clientWidth,
 		  containerHeight : this.state.height,
 		  itemClassName: 'item',
-		  gridWidth: 100,
+		  gridWidth: 10,
 		  transitionDuration: '.8',
 		  transitionTimingFunction: 'easeIn'
 		};
@@ -93,20 +115,33 @@ class WaterfallSampleComponent extends React.Component {
 		<div className="albumPanel">
 			<AutoResponsive ref="container" {...this.getAutoResponsiveProps()}>
 			{
-				this.state.article.map((i,index) => {
-					console.log(this.state.styleList[index])
-					return (
-						<div key={index}  className={`w1 album item`} style={this.state.styleList[index]}>
-						<img className="a-cover" src={i.imgurl}/>
-						<p className="a-layer">
-							<span className="al-title">{i.title}</span>
-						</p>
-						</div>
-					);
-					})
+			this.state.article.map((i,index) => {
+				console.log(this.state.styleList[index])
+				return (
+					<div key={index}  className={`w1 album item`} style={this.state.styleList[index]}>
+					<img className="a-cover" src={i.imgurl}/>
+					<p className="a-layer">
+						<span className="al-title">{i.title}</span>
+					</p>
+					</div>
+				);
+				})
 			}
-			
+			<PullToRefresh
+				damping={60}
+				ref={el => this.ptr = el}
+				style={{
+				height: this.state.height,
+				overflow: 'auto',
+				}}
+				indicator={this.state.down ? {} : { deactivate: '上拉可以刷新' }}
+				direction={this.state.down ? 'down' : 'up'}
+				refreshing={this.state.refreshing}
+				onRefresh={this.onRefresh}
+			> 
+			</PullToRefresh>
 			</AutoResponsive>
+			
 		</div>
 	  );
 	}
