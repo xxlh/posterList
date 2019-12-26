@@ -5,7 +5,7 @@ import AutoResponsive from 'autoresponsive-react';
 import axios from "axios"
 import qs from 'qs';
 import { PullToRefresh } from 'antd-mobile';
-
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const pageSize = 20;
 let styleList=[];
@@ -90,7 +90,7 @@ class WaterfallSampleComponent extends React.Component {
 		  return;
 	  }
 	  console.log("333333333333")
-	  if(this.scrollDom.scrollTop + this.scrollDom.clientHeight >= this.scrollDom.scrollHeight){
+	//   if(this.scrollDom.scrollTop + this.scrollDom.clientHeight >= this.scrollDom.scrollHeight){
 		let page = this.state.page + 1;
 		this.setState({ isLoading: false });
 		this.setState({page: this.state.page + 1},
@@ -98,7 +98,7 @@ class WaterfallSampleComponent extends React.Component {
 				this.getData(this.state.page, this.state.hotKeyword)});
 				console.log("page:" + this.state.page);
 				this.getData(this.state.page, this.state.hotKeyword)
-	}
+	// }
 }
   
 	componentDidMount() {
@@ -117,10 +117,16 @@ class WaterfallSampleComponent extends React.Component {
 	  }
 	render() {
 	  return (
-		<div className="albumPanel scroll-body"  ref={ currHeight =>this.scrollDom = currHeight} 
-		style={{height: this.state.height}}
-		onScroll={this.onEndReached.bind(this)}>
-			<AutoResponsive ref="container"  {...this.getAutoResponsiveProps()} onScroll={this.onEndReached.bind(this)}>
+		<div className="albumPanel" style={{ height: this.state.height, overflow: "auto" }} >
+			
+			<AutoResponsive ref="container"  {...this.getAutoResponsiveProps()} className="scrollableDiv">
+				<InfiniteScroll
+				dataLength={this.state.article}
+				next={this.onEndReached}
+				hasMore={true}
+				loader={<h4>Loading...</h4>}
+				scrollableTarget="scrollableDiv"
+			>
 			{
 			this.state.article.map((i,index) => {
 				console.log(this.state.styleList[index])
@@ -134,6 +140,7 @@ class WaterfallSampleComponent extends React.Component {
 				);
 				})
 			}
+			</InfiniteScroll>
 			</AutoResponsive>
 			
 		</div>
