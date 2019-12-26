@@ -6,7 +6,8 @@ import axios from "axios"
 import qs from 'qs';
 import { PullToRefresh } from 'antd-mobile';
 
-const pageSize = 10;
+
+const pageSize = 20;
 let styleList=[];
 let getItemStyle = function() {
 	return {
@@ -29,7 +30,7 @@ class WaterfallSampleComponent extends React.Component {
 			isLoading: true,
 			refreshing: true,
 			refreshing: false,
-			down: true,
+			down: false,
 			hasMore: true,
 			height: document.documentElement.clientHeight * 2 / 3,
 		};
@@ -76,9 +77,10 @@ class WaterfallSampleComponent extends React.Component {
         
 	}
 	onRefresh = () => {
+		console.log("22222222")
 		this.setState({
-			page : 1 ,
-			searchkeyword : "" ,
+			page: this.state.page + 1,
+			// searchkeyword : "" ,
 		  //   hotKeyword : "" ,
 		},() => this.getData(this.state.page, this.state.hotKeyword));
   };
@@ -87,14 +89,17 @@ class WaterfallSampleComponent extends React.Component {
 	  if (!this.state.hasMore) {
 		  return;
 	  }
-	  let page = this.state.page + 1;
-	  this.setState({ isLoading: false });
-	  this.setState({page: this.state.page + 1},
-		  ()=>{ console.log("page:" + this.state.page)
-			  this.getData(this.state.page, this.state.hotKeyword)});
-			  console.log("page:" + this.state.page);
-			  this.getData(this.state.page, this.state.hotKeyword)
+	  console.log("333333333333")
+	  if(this.scrollDom.scrollTop + this.scrollDom.clientHeight >= this.scrollDom.scrollHeight){
+		let page = this.state.page + 1;
+		this.setState({ isLoading: false });
+		this.setState({page: this.state.page + 1},
+			()=>{ console.log("page:" + this.state.page)
+				this.getData(this.state.page, this.state.hotKeyword)});
+				console.log("page:" + this.state.page);
+				this.getData(this.state.page, this.state.hotKeyword)
 	}
+}
   
 	componentDidMount() {
 		this.getData(1, this.state.hotKeyword);
@@ -112,8 +117,10 @@ class WaterfallSampleComponent extends React.Component {
 	  }
 	render() {
 	  return (
-		<div className="albumPanel">
-			<AutoResponsive ref="container" {...this.getAutoResponsiveProps()}>
+		<div className="albumPanel scroll-body"  ref={ currHeight =>this.scrollDom = currHeight} 
+		style={{height: this.state.height}}
+		onScroll={this.onEndReached.bind(this)}>
+			<AutoResponsive ref="container"  {...this.getAutoResponsiveProps()} onScroll={this.onEndReached.bind(this)}>
 			{
 			this.state.article.map((i,index) => {
 				console.log(this.state.styleList[index])
@@ -127,19 +134,6 @@ class WaterfallSampleComponent extends React.Component {
 				);
 				})
 			}
-			<PullToRefresh
-				damping={60}
-				ref={el => this.ptr = el}
-				style={{
-				height: this.state.height,
-				overflow: 'auto',
-				}}
-				indicator={this.state.down ? {} : { deactivate: '上拉可以刷新' }}
-				direction={this.state.down ? 'down' : 'up'}
-				refreshing={this.state.refreshing}
-				onRefresh={this.onRefresh}
-			> 
-			</PullToRefresh>
 			</AutoResponsive>
 			
 		</div>
