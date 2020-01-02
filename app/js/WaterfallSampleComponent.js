@@ -8,7 +8,7 @@ import { PullToRefresh } from 'antd-mobile';
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const pageSize = 20;
-let styleList=[];
+// let styleList=[];
 let getItemStyle = function() {
 	return {
 	  width: 150,
@@ -44,26 +44,28 @@ class WaterfallSampleComponent extends React.Component {
 		data.search=searchWord;
 		axios.post('https://sina.ieexx.com/api/public/?s=Projects.getList',qs.stringify(data)).then(function(response){
 			if(response.data.ret == 200 ){
-				 response.data.data.items.map((i,index) => {
-					styleList[index] = getItemStyle();
+				response.data.data.items.map((v,i) => {
+					let styleList = self.state.styleList;
+					styleList.push(getItemStyle());
+					self.setState({styleList});
 					let img = new Image();
-					img.src = i.imgurl;
+					img.src = v.imgurl;
+					img.index = styleList.length - 1;
 					img.onload= () => {
-						styleList[index].height = img.height / img.width * styleList[index].width;
-						self.setState({
-							styleList: styleList
-						  });
+						let styleList = self.state.styleList;
+						styleList[img.index].height = img.height / img.width * styleList[img.index].width;
+						self.setState({styleList});
 					}
 				});
 				if (response.data.data.page == 1) {//如果是第一页，直接覆盖之前的数据
 					self.setState({
 						article:[...response.data.data.items],
-						styleList :styleList
+						// styleList :styleList
 					});
 				} else {
 					self.setState({
 						article:[...self.state.article, ...response.data.data.items],
-						styleList :styleList
+						// styleList :styleList
 					});
 				}
 				// console.log(styleList);
@@ -95,9 +97,10 @@ class WaterfallSampleComponent extends React.Component {
 		this.setState({ isLoading: false });
 		this.setState({page: this.state.page + 1},
 			()=>{ console.log("page:" + this.state.page)
-				this.getData(this.state.page, this.state.hotKeyword)});
-				console.log("page:" + this.state.page);
 				this.getData(this.state.page, this.state.hotKeyword)
+			});
+				// console.log("page:" + this.state.page);
+				// this.getData(this.state.page, this.state.hotKeyword)
 	// }
 }
   
@@ -117,31 +120,30 @@ class WaterfallSampleComponent extends React.Component {
 	  }
 	render() {
 	  return (
-		<div className="albumPanel" style={{ height: this.state.height, overflow: "auto" }} >
+		<div className="albumPanel" id="scrollableDiv" style={{ height: this.state.height, overflow: "auto" }} >
 			
-			<AutoResponsive ref="container"  {...this.getAutoResponsiveProps()} className="scrollableDiv">
-				<InfiniteScroll
+			<AutoResponsive ref="container"  {...this.getAutoResponsiveProps()}>
+			{
+				this.state.article.map((v,i) => {
+					return (
+						<div key={i}  className={`w${i} album item`} style={this.state.styleList[i]}>
+						<img className="a-cover" src={v.imgurl}/>
+						<p className="a-layer">
+							<span className="al-title">{v.title}</span>
+						</p>
+						</div>
+					);
+				})
+			}
+			</AutoResponsive>
+			<InfiniteScroll
 				dataLength={this.state.article}
 				next={this.onEndReached}
 				hasMore={true}
 				loader={<h4>Loading...</h4>}
 				scrollableTarget="scrollableDiv"
 			>
-			{
-			this.state.article.map((i,index) => {
-				console.log(this.state.styleList[index])
-				return (
-					<div key={index}  className={`w1 album item`} style={this.state.styleList[index]}>
-					<img className="a-cover" src={i.imgurl}/>
-					<p className="a-layer">
-						<span className="al-title">{i.title}</span>
-					</p>
-					</div>
-				);
-				})
-			}
 			</InfiniteScroll>
-			</AutoResponsive>
 			
 		</div>
 	  );
