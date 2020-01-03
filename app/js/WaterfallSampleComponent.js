@@ -8,8 +8,9 @@ import { PullToRefresh } from 'antd-mobile';
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const pageSize = 20;
-// let styleList=[];
+let clientWidth ;
 let getItemStyle = function() {
+	
 	return {
 	  width: 150,
 	  height: 200,
@@ -33,6 +34,7 @@ class WaterfallSampleComponent extends React.Component {
 			down: false,
 			hasMore: true,
 			height: document.documentElement.clientHeight * 2 / 3,
+			containerWidth: Math.floor((document.documentElement.clientWidth + 30) / 180 ) * 180 -30 > 1600 ? 1600 : Math.floor((document.documentElement.clientWidth + 30) / 180 ) * 180 -30,
 		};
 	}
 	
@@ -60,16 +62,12 @@ class WaterfallSampleComponent extends React.Component {
 				if (response.data.data.page == 1) {//如果是第一页，直接覆盖之前的数据
 					self.setState({
 						article:[...response.data.data.items],
-						// styleList :styleList
 					});
 				} else {
 					self.setState({
 						article:[...self.state.article, ...response.data.data.items],
-						// styleList :styleList
 					});
 				}
-				// console.log(styleList);
-				// getItemStyle();
 				// if(response.data.data.total <= page * pageSize){}
 			}else{
 				swal(response.data.msg);
@@ -79,38 +77,33 @@ class WaterfallSampleComponent extends React.Component {
         
 	}
 	onRefresh = () => {
-		console.log("22222222")
-		this.setState({
-			page: this.state.page + 1,
-			// searchkeyword : "" ,
-		  //   hotKeyword : "" ,
-		},() => this.getData(this.state.page, this.state.hotKeyword));
-  };
+		this.setState({page: this.state.page + 1},() => this.getData(this.state.page, this.state.hotKeyword));
+  	};
 
   onEndReached = (event) => {
-	  if (!this.state.hasMore) {
-		  return;
-	  }
-	  console.log("333333333333")
-	//   if(this.scrollDom.scrollTop + this.scrollDom.clientHeight >= this.scrollDom.scrollHeight){
+		if (!this.state.hasMore) {
+			return;
+		}
 		let page = this.state.page + 1;
 		this.setState({ isLoading: false });
-		this.setState({page: this.state.page + 1},
-			()=>{ console.log("page:" + this.state.page)
-				this.getData(this.state.page, this.state.hotKeyword)
-			});
-				// console.log("page:" + this.state.page);
-				// this.getData(this.state.page, this.state.hotKeyword)
-	// }
-}
+		this.setState({page: this.state.page + 1}, ()=> this.getData(this.state.page, this.state.hotKeyword));
+	}
   
 	componentDidMount() {
 		this.getData(1, this.state.hotKeyword);
-	  }
+		window.addEventListener('resize', () => {
+			console.log("clientWidth:"+ (Math.floor((document.documentElement.clientWidth + 30) / 180 ) * 180 - 30));
+			console.log("documentElement.clientWidth:"+ document.documentElement.clientWidth);
+			this.setState({
+				containerWidth: Math.floor((document.documentElement.clientWidth + 30) / 180 ) * 180 -30,
+			});
+		}, false);
+	}
+
 	getAutoResponsiveProps() {
 		return {
-		  itemMargin: 10,
-		  containerWidth: document.documentElement.clientWidth,
+		  itemMargin: 30,
+		  containerWidth: this.state.containerWidth,
 		  containerHeight : this.state.height,
 		  itemClassName: 'item',
 		  gridWidth: 10,
@@ -120,7 +113,7 @@ class WaterfallSampleComponent extends React.Component {
 	  }
 	render() {
 	  return (
-		<div className="albumPanel" id="scrollableDiv" style={{ height: this.state.height, overflow: "auto" }} >
+		<div className="albumPanel" id="scrollableDiv" style={{width: this.state.containerWidth, height: this.state.height, overflow: "auto" }} >
 			
 			<AutoResponsive ref="container"  {...this.getAutoResponsiveProps()}>
 			{
