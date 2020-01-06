@@ -6,6 +6,8 @@ import axios from "axios"
 import qs from 'qs';
 import { PullToRefresh } from 'antd-mobile';
 import InfiniteScroll from "react-infinite-scroll-component";
+import { Router, Route, Link } from 'react-router'
+
 
 const pageSize = 20;
 let clientWidth ;
@@ -44,9 +46,9 @@ class WaterfallSampleComponent extends React.Component {
 		data.page = page;
 		data.perpage = pageSize;
 		data.search=searchWord;
-		axios.post('https://sina.ieexx.com/api/public/?s=Projects.getList',qs.stringify(data)).then(function(response){
-			if(response.data.ret == 200 ){
-				response.data.data.items.map((v,i) => {
+		axios.post('https://www.jinping.shop/project/xingzheng/front/getposter_grouplist.php',qs.stringify(data)).then(function(response){
+			if(response.data.err == 0 ){
+				response.data.list.map((v,i) => {
 					let styleList = self.state.styleList;
 					styleList.push(getItemStyle());
 					self.setState({styleList});
@@ -59,13 +61,13 @@ class WaterfallSampleComponent extends React.Component {
 						self.setState({styleList});
 					}
 				});
-				if (response.data.data.page == 1) {//如果是第一页，直接覆盖之前的数据
+				if (page == 1) {//如果是第一页，直接覆盖之前的数据
 					self.setState({
-						article:[...response.data.data.items],
+						article:[...response.data.list],
 					});
 				} else {
 					self.setState({
-						article:[...self.state.article, ...response.data.data.items],
+						article:[...self.state.article, ...response.data.list],
 					});
 				}
 				// if(response.data.data.total <= page * pageSize){}
@@ -119,10 +121,10 @@ class WaterfallSampleComponent extends React.Component {
 			{
 				this.state.article.map((v,i) => {
 					return (
-						<div key={i}  className={`w${i} album item`} style={this.state.styleList[i]}>
-						<img className="a-cover" src={v.imgurl}/>
+						<div key={i}  className={`w${i} album item`} style={this.state.styleList[i]} onClick >
+						<img className="a-cover" src={v.coverimg}/>
 						<p className="a-layer">
-							<span className="al-title">{v.title}</span>
+							<span className="al-title">{v.name}</span>
 						</p>
 						</div>
 					);

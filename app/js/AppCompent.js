@@ -7,7 +7,7 @@ import SearchTabs from './SearchTabs';
 import swal from 'sweetalert';
 import WaterfallSampleComponent from './WaterfallSampleComponent';
 import {SearchBar, PullToRefresh } from 'antd-mobile';
-
+import PosterDetail from './PosterDetail';
 
 class AppCompent extends React.Component{
 	constructor(porps){
@@ -58,7 +58,8 @@ class AppCompent extends React.Component{
 					{/* <SearchTabs hotSubmit = {value => this.handleSearch(value)}/> */}
 				<section className="stage" ref="stage">
 					<section className="img-sec">
-					  <WaterfallSampleComponent />	
+						<PosterDetail></PosterDetail>
+					  {/* <WaterfallSampleComponent />	 */}
 					 </section>
 				</section>
 			</section>
