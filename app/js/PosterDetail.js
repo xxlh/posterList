@@ -41,13 +41,16 @@ class PosterDetail extends React.Component {
  
   
 	componentDidMount() {
-		let { id } = this.porps.name;
+		let { id } = this.props.name;
 		this.getData(id);
 		window.addEventListener('resize', () => {
 			this.setState({
 				posterWidth: document.documentElement.clientWidth > 1000 ? "950px" : "100%",
 			});
 		}, false);
+		console.log(this.props.match);
+		console.log(this.props.location);
+		
 	}
 
 	render() {

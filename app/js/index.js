@@ -2,7 +2,9 @@
 import React from "react"
 import Reactdom from "react-dom"
 import AppCompent from "./AppCompent"
+import PosterDetail from "./PosterDetail"
 import wxShare from "@lib/wxShare"
+import { Route, HashRouter as Router, Link } from 'react-router-dom'
 
 //微信分享文案设置
 var wx = {};
@@ -15,7 +17,17 @@ let wxshare =new wxShare();
 wxshare.setInfo(wx);
 
 Reactdom.render(
-	<AppCompent />,
+	// <AppCompent />,
+	<Router>
+		<div>
+			<Link to="/">首页</Link>
+			<Link to="/one">一个页面</Link>
+			<Link to="/two">另一个页面</Link>
+			<Route exact path="/" component={ AppCompent } />
+			<Route path="/one:id" component={ PosterDetail } />
+			<Route path="/two" component={ PosterDetail } />
+		</div>
+	</Router>,
 	document.getElementById("root")
 );
 

@@ -178,12 +178,12 @@ class WaterfallSampleComponent extends React.Component {
 					{
 						this.state.article.map((v,i) => {
 							return (
-								<div  key={i}  className={`w${i} album item`} style={this.state.styleList[i]}   >
+								<Link to={{pathname:`/one/${v.gid}?gid=${v.gid}`, query:{q_gid:v.gid}}} key={i}  className={`w${i} album item`} style={this.state.styleList[i]}   >
 								<img className="a-cover" src={v.coverimg}/>
 								<p className="a-layer">
 									<span className="al-title">{v.name}</span>
 								</p>
-								</div >
+								</Link >
 							);
 						})
 					}
