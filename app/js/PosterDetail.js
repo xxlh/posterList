@@ -2,7 +2,13 @@ import '../css/index.less';
 import React from "react";
 import axios from "axios"
 import qs from 'qs';
-
+import {
+	BrowserRouter as Router,
+	Switch,
+	Route,
+	Link,
+	useParams
+  } from "react-router-dom";
 
 
 class PosterDetail extends React.Component {
@@ -35,7 +41,8 @@ class PosterDetail extends React.Component {
  
   
 	componentDidMount() {
-		this.getData(1);
+		let { id } = this.porps.name;
+		this.getData(id);
 		window.addEventListener('resize', () => {
 			this.setState({
 				posterWidth: document.documentElement.clientWidth > 1000 ? "950px" : "100%",

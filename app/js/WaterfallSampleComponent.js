@@ -4,9 +4,23 @@ import ReactDOM from 'react-dom';
 import AutoResponsive from 'autoresponsive-react';
 import axios from "axios"
 import qs from 'qs';
-import { PullToRefresh } from 'antd-mobile';
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Router, Route, Link } from 'react-router'
+import 'react-tabs/style/react-tabs.css';
+import swal from 'sweetalert';
+import {SearchBar } from 'antd-mobile';
+import SearchTabs from './SearchTabs';
+import { DatePicker, List } from 'antd-mobile';
+import enUs from 'antd-mobile/lib/date-picker/locale/en_US';
+
+
+import {
+	BrowserRouter as Router,
+	Switch,
+	Route,
+	Link,
+	useParams,
+	useLocation
+  } from "react-router-dom";
 
 
 const pageSize = 20;
@@ -39,7 +53,15 @@ class WaterfallSampleComponent extends React.Component {
 			containerWidth: Math.floor((document.documentElement.clientWidth + 30) / 180 ) * 180 -30 > 1600 ? 1600 : Math.floor((document.documentElement.clientWidth + 30) / 180 ) * 180 -30,
 		};
 	}
-	
+	onChange= (value) => {
+		this.setState({ searchkeyword: value});
+	};
+	clear = () => {
+		this.setState({ searchkeyword: '' });
+	};
+	handleClick = () => {
+		this.manualFocusInst.focus();
+	}
 	getData(page,searchWord) {//获取数据的函数
 		var self = this;
 		var data={};
@@ -78,6 +100,7 @@ class WaterfallSampleComponent extends React.Component {
 		})
         
 	}
+	
 	onRefresh = () => {
 		this.setState({page: this.state.page + 1},() => this.getData(this.state.page, this.state.hotKeyword));
   	};
@@ -94,8 +117,6 @@ class WaterfallSampleComponent extends React.Component {
 	componentDidMount() {
 		this.getData(1, this.state.hotKeyword);
 		window.addEventListener('resize', () => {
-			console.log("clientWidth:"+ (Math.floor((document.documentElement.clientWidth + 30) / 180 ) * 180 - 30));
-			console.log("documentElement.clientWidth:"+ document.documentElement.clientWidth);
 			this.setState({
 				containerWidth: Math.floor((document.documentElement.clientWidth + 30) / 180 ) * 180 -30,
 			});
@@ -114,33 +135,72 @@ class WaterfallSampleComponent extends React.Component {
 		};
 	  }
 	render() {
+		// let query = this.useQuery()
 	  return (
-		<div className="albumPanel" id="scrollableDiv" style={{width: this.state.containerWidth, height: this.state.height, overflow: "auto" }} >
-			
-			<AutoResponsive ref="container"  {...this.getAutoResponsiveProps()}>
-			{
-				this.state.article.map((v,i) => {
-					return (
-						<div key={i}  className={`w${i} album item`} style={this.state.styleList[i]} onClick >
-						<img className="a-cover" src={v.coverimg}/>
-						<p className="a-layer">
-							<span className="al-title">{v.name}</span>
-						</p>
-						</div>
-					);
-				})
-			}
-			</AutoResponsive>
-			<InfiniteScroll
-				dataLength={this.state.article}
-				next={this.onEndReached}
-				hasMore={true}
-				loader={<h4>Loading...</h4>}
-				scrollableTarget="scrollableDiv"
-			>
-			</InfiniteScroll>
-			
-		</div>
+		<section className="page">
+			<SearchBar
+				value={this.state.searchkeyword}
+					placeholder="Search"
+				//  onSubmit={value => this.handleSearch(value)}
+				//  onClear={value => this.handleSearch(value)}
+					onFocus={() => console.log('onFocus')}
+					onBlur={() => console.log('onBlur')}
+				//  onCancel={value => this.handleSearch("")}
+					showCancelButton
+					onChange={this.onChange}
+				/>
+			{/* <SearchTabs hotSubmit = {value => this.handleSearch(value)}/> */}
+			<div>
+			<DatePicker
+				mode="date"
+				title="start Date"
+				extra="开始时间"
+				value={this.state.date}
+				onChange={date => this.setState({ date })}
+				>
+					<List.Item arrow="horizontal">开始时间</List.Item>
+				</DatePicker>
+				<DatePicker
+				mode="date"
+				title="end Date"
+				extra="结束时间"
+				value={this.state.date}
+				onChange={date => this.setState({ date })}
+				>
+					  <List.Item arrow="horizontal">结束时间</List.Item>
+				</DatePicker>
+
+			</div>
+			<section className="stage" ref="stage">
+				<section className="img-sec">
+					<div className="albumPanel" id="scrollableDiv" style={{width: this.state.containerWidth, height: this.state.height, overflow: "auto" }} >
+					<AutoResponsive ref="container"  {...this.getAutoResponsiveProps()}>
+					{
+						this.state.article.map((v,i) => {
+							return (
+								<div  key={i}  className={`w${i} album item`} style={this.state.styleList[i]}   >
+								<img className="a-cover" src={v.coverimg}/>
+								<p className="a-layer">
+									<span className="al-title">{v.name}</span>
+								</p>
+								</div >
+							);
+						})
+					}
+					</AutoResponsive>
+					<InfiniteScroll
+						dataLength={this.state.article}
+						next={this.onEndReached}
+						hasMore={true}
+						loader={<h4>Loading...</h4>}
+						scrollableTarget="scrollableDiv"
+					>
+					</InfiniteScroll>
+					
+				</div>
+				</section>
+			</section>
+		</section>
 	  );
 	}
   }

@@ -8,9 +8,9 @@ import wxShare from "@lib/wxShare"
 var wx = {};
 wx.shareLink ="http://n.sinaimg.cn/fj/projects/index2.html"; 
 wx.sharePic = "http://n.sinaimg.cn/fj/anta/img/wxShare.jpg"; 
-wx.shareTit = "新浪厦门H5案例库"; 
-wx.shareDesc = "可按照行业、功能、客户、时间分类检索，同时支持关键字检索案例。";
-wx.sharePyq = "可按照行业、功能、客户、时间分类检索，同时支持关键字检索案例。";
+wx.shareTit = "新浪厦门海报案例库"; 
+wx.shareDesc = "可按照人物、景色分类检索，同时支持关键字检索案例。";
+wx.sharePyq = "可按照人物、景色分类检索，同时支持关键字检索案例。";
 let wxshare =new wxShare();
 wxshare.setInfo(wx);
 
