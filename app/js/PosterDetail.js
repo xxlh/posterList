@@ -35,15 +35,14 @@ class PosterDetail extends React.Component {
 	  }
 	componentDidMount() {
 		// let id  = 1//parseInt(this.props.location.query.gid) ;
-		const { id } = Control.state || {}
-		this.getData(id);
+		let { gid } = Control.state || {}
+		this.getData(gid);
 		window.addEventListener('resize', () => {
 			this.setState({
 				posterWidth: document.documentElement.clientWidth > 1000 ? "950px" : "100%",
 			});
 		}, false);
-		console.log(this.props.match);
-		console.log(this.props.location);
+		console.log(gid);
 	}
 
 	render() {

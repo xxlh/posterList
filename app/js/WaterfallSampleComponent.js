@@ -11,6 +11,7 @@ import {SearchBar } from 'antd-mobile';
 import SearchTabs from './SearchTabs';
 import { DatePicker, List } from 'antd-mobile';
 import enUs from 'antd-mobile/lib/date-picker/locale/en_US';
+import { Menu, ActivityIndicator, NavBar } from 'antd-mobile';
 
 
 import { CacheLink  } from "react-keeper";
@@ -43,7 +44,7 @@ class WaterfallSampleComponent extends React.Component {
 			down: false,
 			hasMore: true,
 			height: document.documentElement.clientHeight * 2 / 3,
-			containerWidth: Math.floor((document.documentElement.clientWidth + 30) / 180 ) * 180 -30 > 1600 ? 1600 : Math.floor((document.documentElement.clientWidth + 30) / 180 ) * 180 -30,
+			containerWidth: Math.floor((document.documentElement.clientWidth ) / 180 ) * 180 -30 ,
 		};
 	}
 	onChange= (value) => {
