@@ -4,7 +4,7 @@ import Reactdom from "react-dom"
 import AppCompent from "./AppCompent"
 import PosterDetail from "./PosterDetail"
 import wxShare from "@lib/wxShare"
-import { Route, HashRouter as Router, Link } from 'react-router-dom'
+import { Route, HashRouter as Router, Link } from 'react-keeper'
 
 //微信分享文案设置
 var wx = {};
@@ -20,7 +20,7 @@ Reactdom.render(
 	// <AppCompent />,
 	<Router>
 		<div>
-			<Route exact path="/" component={ AppCompent } />
+			<Route exact path="/>" component={ AppCompent } />
 			<Route path="/detial" component={ PosterDetail } />
 		</div>
 	</Router>,

@@ -2,7 +2,7 @@ import '../css/index.less';
 import React from "react";
 import axios from "axios"
 import qs from 'qs';
-
+import { Control } from 'react-keeper'
 
 class PosterDetail extends React.Component {
 	constructor(porps){
@@ -29,9 +29,13 @@ class PosterDetail extends React.Component {
 		})
         
 	}
-
+	onHandleClick = () => {
+		/* 返回上一页，也可以这样-- Control.go(path, state) */
+		Control.go(-1)
+	  }
 	componentDidMount() {
-		let id  = parseInt(this.props.location.query.gid) ;
+		// let id  = 1//parseInt(this.props.location.query.gid) ;
+		const { id } = Control.state || {}
 		this.getData(id);
 		window.addEventListener('resize', () => {
 			this.setState({
@@ -45,7 +49,7 @@ class PosterDetail extends React.Component {
 	render() {
 	  return (
 		<div className="stage" ref="stage">
-			<div className = "back-home">返 回</div>
+			<div className = "back-home" onClick={this.onHandleClick}>返 回</div>
 		  	<div className = "detail" style = {{width: this.state.posterWidth }}>
 			{
 				this.state.posterList.map((v,i) => {

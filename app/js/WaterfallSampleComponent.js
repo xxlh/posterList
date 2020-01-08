@@ -13,7 +13,7 @@ import { DatePicker, List } from 'antd-mobile';
 import enUs from 'antd-mobile/lib/date-picker/locale/en_US';
 
 
-import { Link } from "react-router-dom";
+import { CacheLink  } from "react-keeper";
 
 
 const pageSize = 20;
@@ -85,7 +85,7 @@ class WaterfallSampleComponent extends React.Component {
 						article:[...self.state.article, ...response.data.list],
 					});
 				}
-				// if(response.data.data.total <= page * pageSize){
+				// if(response.data.data.totalnum <= page * pageSize){
 				// 	self.setState({
 				// 		hasMore:false,
 				// 	})
@@ -175,12 +175,12 @@ class WaterfallSampleComponent extends React.Component {
 					{
 						this.state.article.map((v,i) => {
 							return (
-								<Link to={{pathname:`/detial`, query:{gid:v.gid}}} key={i}  className={`w${i} album item`} style={this.state.styleList[i]}   >
+								<CacheLink  to='/detial'  state ={{gid:v.gid}} key={i}  className={`w${i} album item`} style={this.state.styleList[i]}   >
 								<img className="a-cover" src={v.coverimg}/>
 								<p className="a-layer">
 									<span className="al-title">{v.name}</span>
 								</p>
-								</Link >
+								</CacheLink  >
 							);
 						})
 					}
