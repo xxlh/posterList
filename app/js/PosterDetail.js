@@ -2,21 +2,13 @@ import '../css/index.less';
 import React from "react";
 import axios from "axios"
 import qs from 'qs';
-import {
-	BrowserRouter as Router,
-	Switch,
-	Route,
-	Link,
-	useParams
-  } from "react-router-dom";
 
 
 class PosterDetail extends React.Component {
 	constructor(porps){
 		super(porps);
-		
 		this.state = {
-			article: [],//文章列表
+			posterList: [],//文章列表
 			posterWidth: document.documentElement.clientWidth > 1000 ? "1000px" : "100%",
 		};
 	}
@@ -28,7 +20,7 @@ class PosterDetail extends React.Component {
 		axios.post('https://www.jinping.shop/project/xingzheng/front/getposter_imglist.php',qs.stringify(data)).then(function(response){
 			if(response.data.err == 0 ){
 				self.setState({
-					article:[...self.state.article, ...response.data.list],
+					posterList:[...self.state.posterList, ...response.data.list],
 				});
 			}else{
 				swal(response.data.msg);
@@ -37,11 +29,9 @@ class PosterDetail extends React.Component {
 		})
         
 	}
-	
- 
-  
+
 	componentDidMount() {
-		let { id } = this.props.name;
+		let id  = parseInt(this.props.location.query.gid) ;
 		this.getData(id);
 		window.addEventListener('resize', () => {
 			this.setState({
@@ -50,7 +40,6 @@ class PosterDetail extends React.Component {
 		}, false);
 		console.log(this.props.match);
 		console.log(this.props.location);
-		
 	}
 
 	render() {
@@ -59,7 +48,7 @@ class PosterDetail extends React.Component {
 			<div className = "back-home">返 回</div>
 		  	<div className = "detail" style = {{width: this.state.posterWidth }}>
 			{
-				this.state.article.map((v,i) => {
+				this.state.posterList.map((v,i) => {
 					return (
 						<div key={i}  className = "pic item">
 						<img className = "a-cover" src = {v.imgurl}/>

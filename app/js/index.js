@@ -20,12 +20,8 @@ Reactdom.render(
 	// <AppCompent />,
 	<Router>
 		<div>
-			<Link to="/">首页</Link>
-			<Link to="/one">一个页面</Link>
-			<Link to="/two">另一个页面</Link>
 			<Route exact path="/" component={ AppCompent } />
-			<Route path="/one:id" component={ PosterDetail } />
-			<Route path="/two" component={ PosterDetail } />
+			<Route path="/detial" component={ PosterDetail } />
 		</div>
 	</Router>,
 	document.getElementById("root")
