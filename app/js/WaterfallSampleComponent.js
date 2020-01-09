@@ -7,16 +7,12 @@ import qs from 'qs';
 import InfiniteScroll from "react-infinite-scroll-component";
 import 'react-tabs/style/react-tabs.css';
 import swal from 'sweetalert';
-import {SearchBar } from 'antd-mobile';
-import SearchTabs from './SearchTabs';
-import { DatePicker, List } from 'antd-mobile';
-import enUs from 'antd-mobile/lib/date-picker/locale/en_US';
-import { Menu, ActivityIndicator, NavBar } from 'antd-mobile';
-
-
+import 'antd/dist/antd.css';
+import { Select, Input, DatePicker } from 'antd';
 import { CacheLink  } from "react-keeper";
 
-
+const { Search } = Input;
+const { RangePicker } = DatePicker;
 const pageSize = 20;
 let clientWidth ;
 let getItemStyle = function() {
@@ -32,7 +28,7 @@ class WaterfallSampleComponent extends React.Component {
 		
 		this.state = {
 			keyword: [],
-			searchkeyword:'',
+			searchkeyword:{},
 			hotKeyword : "" ,
 			page: 1,
 			article: [],//文章列表
@@ -45,23 +41,27 @@ class WaterfallSampleComponent extends React.Component {
 			hasMore: true,
 			height: document.documentElement.clientHeight * 2 / 3,
 			containerWidth: Math.floor((document.documentElement.clientWidth ) / 180 ) * 180 -30 ,
+			comeFrom: [],
+			typelaber: [],
 		};
 	}
 	onChange= (value) => {
-		this.setState({ searchkeyword: value});
+		console.log(value)
+		this.setState({ 
+			searchkeyword: {...this.state.searchkeyword, name: value},
+			page : 1
+		} ,()=>{
+			this.getData(this.state.page, this.state.searchkeyword);
+		});
 	};
-	clear = () => {
-		this.setState({ searchkeyword: '' });
-	};
-	handleClick = () => {
-		this.manualFocusInst.focus();
-	}
-	getData(page,searchWord) {//获取数据的函数
+	
+	getData(page, searchWord) {//获取数据的函数
 		var self = this;
-		var data={};
+		var data = {};
 		data.page = page;
 		data.perpage = pageSize;
-		data.search=searchWord;
+		data = [...searchWord];
+		console.log("data:" + data);
 		axios.post('https://www.jinping.shop/project/xingzheng/front/getposter_grouplist.php',qs.stringify(data)).then(function(response){
 			if(response.data.err == 0 ){
 				response.data.list.map((v,i) => {
@@ -98,6 +98,29 @@ class WaterfallSampleComponent extends React.Component {
 		})
         
 	}
+	getLaber() {//获取数据的函数
+		axios.post('https://www.jinping.shop/project/xingzheng/front/getposter_idslist.php').then((response) => {
+			if(response.data.err == 0 ){
+				let comeFrom = [];
+				response.data.scenelist.map((v,i) => {
+				    comeFrom.push(<Option key={v.sceneid}>{v.scenename}</Option>)
+				});
+				let typelaber = [];
+				response.data.typelist.map((v,i) => {
+				    typelaber.push(<Option key={v.typeid}>{v.typename}</Option>)
+				});
+				console.log(comeFrom)
+				this.setState({
+					comeFrom: [...comeFrom],
+					typelaber: [...typelaber],
+				})
+			}else{
+				swal(response.data.msg);
+			}
+			
+		})
+        
+	}
 	
 	onRefresh = () => {
 		this.setState({page: this.state.page + 1},() => this.getData(this.state.page, this.state.hotKeyword));
@@ -114,6 +137,7 @@ class WaterfallSampleComponent extends React.Component {
   
 	componentDidMount() {
 		this.getData(1, this.state.hotKeyword);
+		this.getLaber();
 		window.addEventListener('resize', () => {
 			this.setState({
 				containerWidth: Math.floor((document.documentElement.clientWidth + 30) / 180 ) * 180 -30,
@@ -132,43 +156,53 @@ class WaterfallSampleComponent extends React.Component {
 		  transitionTimingFunction: 'easeIn'
 		};
 	  }
+	  handleChange(value) {
+		console.log(`selected ${value}`);
+	  }
 	render() {
 		// let query = this.useQuery()
 	  return (
 		<section className="page">
-			<SearchBar
-				value={this.state.searchkeyword}
-					placeholder="Search"
-				//  onSubmit={value => this.handleSearch(value)}
-				//  onClear={value => this.handleSearch(value)}
-					onFocus={() => console.log('onFocus')}
-					onBlur={() => console.log('onBlur')}
-				//  onCancel={value => this.handleSearch("")}
-					showCancelButton
-					onChange={this.onChange}
-				/>
-			{/* <SearchTabs hotSubmit = {value => this.handleSearch(value)}/> */}
-			<div>
-			<DatePicker
-				mode="date"
-				title="start Date"
-				extra="开始时间"
-				value={this.state.date}
-				onChange={date => this.setState({ date })}
-				>
-					<List.Item arrow="horizontal">开始时间</List.Item>
-				</DatePicker>
-				<DatePicker
-				mode="date"
-				title="end Date"
-				extra="结束时间"
-				value={this.state.date}
-				onChange={date => this.setState({ date })}
-				>
-					  <List.Item arrow="horizontal">结束时间</List.Item>
-				</DatePicker>
-
-			</div>
+			<Select
+				mode="multiple"
+				style={{ width: '30%', margin:'10px'}}
+				placeholder="来源"
+				defaultValue={[]}
+				onChange={this.handleChange}
+			>
+				{this.state.comeFrom}
+			</Select>
+			<Select
+				mode="multiple"
+				style={{ width: '30%', margin:'10px' }}
+				placeholder="类别"
+				defaultValue={[]}
+				onChange={this.handleChange}
+			>
+					{this.state.typelaber}
+			</Select>
+			<RangePicker
+				dateRender={current => {
+					const style = {};
+					if (current.date() === 1) {
+					style.border = '1px solid #1890ff';
+					style.borderRadius = '50%';
+					}
+					return (
+					<div className="ant-calendar-date" style={style}>
+						{current.date()}
+					</div>
+					);
+				}}
+			/>
+			<Search
+				placeholder="input search text"
+				enterButton="Search"
+				size="default"
+				style={{ width: '40%'}}
+				onSearch={(value) => this.onChange(value)}
+			/>
+			
 			<section className="stage" ref="stage">
 				<section className="img-sec">
 					<div className="albumPanel" id="scrollableDiv" style={{width: this.state.containerWidth, height: this.state.height, overflow: "auto" }} >
