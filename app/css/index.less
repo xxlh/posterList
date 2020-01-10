@@ -4,16 +4,15 @@
   width: 2px;
 }
 ::-webkit-scrollbar-thumb {
-//   background: #000;
+  background: #000;
 }
 .albumPanel {
   position: relative;
-  width: 100%;
   font-family: "Microsoft Yahei", arial;
   font-size: 12px;
   line-height: 1.5;
   text-align: center;
-  margin: 0 auto;
+  margin: auto;
   margin-top: 5px;
   padding-bottom: 60px;
 }
@@ -67,10 +66,6 @@
 .albumPanel .album .a-cover {
   opacity: 1;
 }
-.albumPanel .album .a-cover  {
-	opacity: 1;
-	width: 100%;
-  }
 .albumPanel .album .a-cont {
   opacity: 0;
 }
@@ -78,7 +73,7 @@
   text-decoration: none;
 }
 .albumPanel .album:hover .a-cover {
-  opacity: 1;
+  opacity: 0;
 }
 .albumPanel .album:hover .a-cont {
   opacity: 1;
@@ -111,7 +106,7 @@
   position: absolute;
   left: 0;
   bottom: 0;
-  height: 30px;
+  height: 72px;
   width: 100%;
   margin: 0;
   padding: 0;
@@ -187,7 +182,7 @@
 }
 .albumPanel .album:hover .a-layer {
   background: none;
-  // filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#00000000,endcolorstr=#00000000,gradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#00000000,endcolorstr=#00000000,gradientType=0);
 }
 .albumPanel .album:hover .a-layer .al-brand,
 .albumPanel .album:hover .a-layer .al-title {
@@ -226,10 +221,11 @@
   -ms-transform: none;
 }
 .albumPanel .w1 {
-  width: 3rem;
+  width: 190px;
+  height: 240px;
 }
 .albumPanel .w1 img {
-  width: 100%;
+  width: 190px;
 }
 .albumPanel .w1 .al-brand {
   padding-top: 3px;
@@ -420,6 +416,7 @@
   color: white;
   font-size: 120px;
 }
+
 
 .back-home{
   position: fixed;

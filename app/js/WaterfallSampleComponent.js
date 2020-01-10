@@ -39,12 +39,13 @@ class WaterfallSampleComponent extends React.Component {
 			styleList : [],//图片样式主要获取高度
 			isLoading: true,
 			hasMore: true,
-			height: document.documentElement.clientHeight * 2 / 3,
-			containerWidth: Math.floor((document.documentElement.clientWidth ) / 180 ) * 180 -30 ,
+			height: document.documentElement.clientHeight * 4 / 5,
+			containerWidth: Math.floor((document.documentElement.clientWidth +10) / 180 ) * 180 -10 ,
 			comeFrom: [],
 			typelaber: [],
 			startTime:undefined,//开始时间
-      		endTime:undefined,  //结束时间
+			endTime:undefined,  //结束时间
+			timeRang:[]
 		};
 	}
 
@@ -100,18 +101,15 @@ class WaterfallSampleComponent extends React.Component {
 		}
 	  }
 
-	  handleTimeChange(date, dateString) {
+	  handleTimeChange = (date, dateString) => {
 		console.log(dateString);
+		if(dateString!= undefined )
 		this.setState({
-			startTime:dateString[0],
-			endTime:dateString[1],  
-		  })
-		// this.setState({ 
-		// 	searchkeyword: {...this.state.searchkeyword, sceneids: value.join(",")},
-		// 	page : 1
-		// } ,()=>{
-		// 	this.getData(this.state.page, this.state.searchkeyword);
-		// });
+			searchkeyword: {...this.state.searchkeyword, startdate: dateString[0] ,enddate:  dateString[1]},
+			page : 1
+		} ,()=>{
+			this.getData(this.state.page, this.state.searchkeyword);
+		});
 		
 	  }
 
@@ -125,34 +123,42 @@ class WaterfallSampleComponent extends React.Component {
 	
 		axios.post('https://www.jinping.shop/project/xingzheng/front/getposter_grouplist.php',qs.stringify(data)).then(function(response){
 			if(response.data.err == 0 ){
-				response.data.list.map((v,i) => {
-					let styleList = self.state.styleList;
-					styleList.push(getItemStyle());
-					self.setState({styleList});
-					let img = new Image();
-					img.src = v.imgurl;
-					img.index = styleList.length - 1;
-					img.onload= () => {
+				if(response.data.totalnum != 0){
+					response.data.list.map((v,i) => {
 						let styleList = self.state.styleList;
-						styleList[img.index].height = img.height / img.width * styleList[img.index].width;
+						styleList.push(getItemStyle());
 						self.setState({styleList});
+						let img = new Image();
+						img.src = v.imgurl;
+						img.index = styleList.length - 1;
+						img.onload= () => {
+							let styleList = self.state.styleList;
+							styleList[img.index].height = img.height / img.width * styleList[img.index].width;
+							self.setState({styleList});
+						}
+					});
+					if (page == 1) {//如果是第一页，直接覆盖之前的数据
+						self.setState({
+							article:[...response.data.list],
+						});
+					} else {
+						self.setState({
+							article:[...self.state.article, ...response.data.list],
+						});
 					}
-				});
-				if (page == 1) {//如果是第一页，直接覆盖之前的数据
+					if(response.data.totalnum <= page * pageSize){
+						self.setState({
+							hasMore:false,
+							isLoading: true,
+						})
+					}
+				}else{
+					swal("这里无符合你条件的哈");
 					self.setState({
-						article:[...response.data.list],
-					});
-				} else {
-					self.setState({
-						article:[...self.state.article, ...response.data.list],
+						article:[],
 					});
 				}
-				if(response.data.totalnum <= page * pageSize){
-					self.setState({
-						hasMore:false,
-						isLoading: true,
-					})
-				}
+				
 			}else{
 				swal(response.data.msg);
 			}
@@ -179,7 +185,7 @@ class WaterfallSampleComponent extends React.Component {
 		this.getData(1, this.state.searchWord);
 		window.addEventListener('resize', () => {
 			this.setState({
-				containerWidth: Math.floor((document.documentElement.clientWidth + 30) / 180 ) * 180 -30,
+				containerWidth: Math.floor((document.documentElement.clientWidth + 10) / 180 ) * 180 -10,
 			});
 		}, false);
 	}
@@ -187,13 +193,19 @@ class WaterfallSampleComponent extends React.Component {
 	// 属性设置
 	getAutoResponsiveProps() {
 		return {
-		  itemMargin: 30,
-		  containerWidth: this.state.containerWidth,
-		  containerHeight : this.state.height,
-		  itemClassName: 'item',
-		  gridWidth: 10,
-		  transitionDuration: '.8',
-		  transitionTimingFunction: 'easeIn'
+			// itemMargin: 30,
+			// containerWidth: this.state.containerWidth,
+			// containerHeight : this.state.height,
+			// itemClassName: 'item',
+			// gridWidth: 10,
+			// transitionDuration: '.8',
+			// transitionTimingFunction: 'easeIn'
+			itemMargin: 10,
+			containerWidth: this.state.containerWidth || document.body.clientWidth,
+			itemClassName: 'item',
+			gridWidth: 100,
+			transitionDuration: '.5'
+		  
 		};
 	  }
 	
@@ -225,11 +237,11 @@ class WaterfallSampleComponent extends React.Component {
 					{this.state.typelaber}
 			</Select>
 			<RangePicker locale={locale} showTime 
-				renderExtraFooter={() => 'extra footer'}
-				format="YYYY-MM-DD"
-				onChange={this.handleTimeChange()}
-				value={this.state.startTime===undefined||this.state.endTime===undefined||this.state.startTime===""||this.state.endTime===""?null:[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}
-				// onOk = {this.handleTimeChange()}
+				// renderExtraFooter={() => 'extra footer'}
+				format = {dateFormat}
+				// onChange = {this.handleTimeChange}
+				// value={this.state.timeRang}
+				onOk = {this.handleTimeChange}
 			/>
 			<Search
 				placeholder="input search text"
@@ -246,12 +258,12 @@ class WaterfallSampleComponent extends React.Component {
 					{
 						this.state.article.map((v,i) => {
 							return (
-								<CacheLink  to='/detial'  state ={{gid:v.gid}} key={i}  className={`w${i} album item`} style={this.state.styleList[i]}   >
+								<div  to='/detial'  state ={{gid:v.gid}} key={i}  className={`w${i} album item`} style={this.state.styleList[i]}   >
 								<img className="a-cover" src={v.coverimg}/>
 								<p className="a-layer">
 									<span className="al-title">{v.name}</span>
 								</p>
-								</CacheLink  >
+								</div>
 							);
 						})
 					}
