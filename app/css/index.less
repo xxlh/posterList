@@ -1,18 +1,21 @@
 @import '../assets/base.css';
-
+#root{
+  overflow: hidden;
+}
 ::-webkit-scrollbar {
   width: 2px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #000;
+//   background: #000;
 }
 .albumPanel {
   position: relative;
+  width: 100%;
   font-family: "Microsoft Yahei", arial;
   font-size: 12px;
   line-height: 1.5;
   text-align: center;
-  margin: auto;
+  margin: 0 auto;
   margin-top: 5px;
   padding-bottom: 60px;
 }
@@ -66,6 +69,10 @@
 .albumPanel .album .a-cover {
   opacity: 1;
 }
+.albumPanel .album .a-cover  {
+	opacity: 1;
+	width: 100%;
+  }
 .albumPanel .album .a-cont {
   opacity: 0;
 }
@@ -73,7 +80,7 @@
   text-decoration: none;
 }
 .albumPanel .album:hover .a-cover {
-  opacity: 0;
+  opacity: 1;
 }
 .albumPanel .album:hover .a-cont {
   opacity: 1;
@@ -106,7 +113,7 @@
   position: absolute;
   left: 0;
   bottom: 0;
-  height: 72px;
+  height: 30px;
   width: 100%;
   margin: 0;
   padding: 0;
@@ -182,7 +189,7 @@
 }
 .albumPanel .album:hover .a-layer {
   background: none;
-  filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#00000000,endcolorstr=#00000000,gradientType=0);
+  // filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#00000000,endcolorstr=#00000000,gradientType=0);
 }
 .albumPanel .album:hover .a-layer .al-brand,
 .albumPanel .album:hover .a-layer .al-title {
@@ -221,11 +228,10 @@
   -ms-transform: none;
 }
 .albumPanel .w1 {
-  width: 190px;
-  height: 240px;
+  width: 3rem;
 }
 .albumPanel .w1 img {
-  width: 190px;
+  width: 100%;
 }
 .albumPanel .w1 .al-brand {
   padding-top: 3px;
@@ -417,15 +423,14 @@
   font-size: 120px;
 }
 
-
 .back-home{
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  height:0.8rem;
-  max-height: 80px;
-  line-height: 0.8rem;
+  height:50px;
+  max-height: 50px;
+  line-height: 50px;
   text-align: center;
   font-size: 22px;
   font-weight: bold;
