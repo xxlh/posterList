@@ -8,8 +8,8 @@ import { Route, HashRouter as Router, Link } from 'react-keeper'
 
 //微信分享文案设置
 var wx = {};
-wx.shareLink ="http://n.sinaimg.cn/fj/poster/index2.html"; 
-wx.sharePic = "http://n.sinaimg.cn/fj/poster/img/wxShare.jpg"; 
+wx.shareLink ="http://n.sinaimg.cn/fj/poster/index32.html"; 
+wx.sharePic = "http://n.sinaimg.cn/fj/poster/wxShare.jpg"; 
 wx.shareTit = "新浪厦门海报案例库"; 
 wx.shareDesc = "可按照人物、景色分类检索，同时支持关键字检索案例。";
 wx.sharePyq = "可按照人物、景色分类检索，同时支持关键字检索案例。";
