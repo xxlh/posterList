@@ -3,7 +3,7 @@ import React from "react";
 import axios from "axios"
 import qs from 'qs';
 import { Control } from 'react-keeper'
-
+import { Button } from 'antd';
 class PosterDetail extends React.Component {
 	constructor(porps){
 		super(porps);
@@ -48,7 +48,8 @@ class PosterDetail extends React.Component {
 	render() {
 	  return (
 		<div className="stage" ref="stage">
-			<div className = "back-home" onClick={this.onHandleClick}>返 回</div>
+			 <Button type="primary" shape="circle" icon="rollback" onClick={this.onHandleClick} style={{position:'fixed', bottom:'2%', right:'5%', zIndex:99}}/>
+			{/* <div className = "back-home" onClick={this.onHandleClick}>返 回</div> */}
 		  	<div className = "detail" style = {{width: this.state.posterWidth }}>
 			{
 				this.state.posterList.map((v,i) => {

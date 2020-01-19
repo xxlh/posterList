@@ -40,7 +40,7 @@ class WaterfallSampleComponent extends React.Component {
 			styleList : [],//图片样式主要获取高度
 			isLoading: true,
 			hasMore: true,
-			height: document.documentElement.clientHeight * 4 / 5,
+			height: document.documentElement.clientHeight * 9/ 10,
 			containerWidth: Math.floor((document.documentElement.clientWidth +10) / 180 ) * 180 -10 ,
 			comeFrom: [],
 			typelaber: [],
@@ -289,9 +289,10 @@ class WaterfallSampleComponent extends React.Component {
 		const { startValue, endValue } = this.state;
 	  return (
 		<section className="page">
-			<Button type="primary" onClick={this.showDrawer} style={{position:'absolute', top:'0', right:'5%',}}>
+			 <Button type="primary" shape="circle" icon="search" onClick={this.showDrawer} style={{position:'absolute', bottom:'2%', right:'5%', zIndex:99}}/>
+			{/* <Button type="primary" onClick={this.showDrawer} style={{position:'absolute', top:'0', right:'5%',}}>
 				搜索
-			</Button>
+			</Button> */}
 			<Drawer
 				title="搜索条件"
 				placement="left"
@@ -301,7 +302,7 @@ class WaterfallSampleComponent extends React.Component {
 				maskClosable={this.state.visible}
 			>
 				<DatePicker
-					style={{ width: '100%', margin:'5px'}}
+					style={{ width: '100%', margin:'5px', float: 'right'}}
 					disabledDate={this.disabledStartDate}
 					// showTime
 					format= {dateFormat}
@@ -311,7 +312,7 @@ class WaterfallSampleComponent extends React.Component {
 					// onOpenChange={this.handleStartOpenChange}
 				/>
 				<DatePicker
-					style={{ width: '100%', margin:'5px'}}
+					style={{ width: '100%', margin:'5px', float: 'right'}}
 					disabledDate={this.disabledEndDate}
 					// showTime
 					format= {dateFormat}
@@ -323,7 +324,7 @@ class WaterfallSampleComponent extends React.Component {
 				/>
 				<Select
 					mode="multiple"
-					style={{ width: '100%', margin:'5px'}}
+					style={{ width: '100%', margin:'5px', float: 'right'}}
 					placeholder="海报场景(来源)"
 					defaultValue={[]}
 					allowClear
@@ -334,7 +335,7 @@ class WaterfallSampleComponent extends React.Component {
 				</Select>
 				<Select
 					mode="multiple"
-					style={{ width: '100%', margin:'5px' }}
+					style={{ width: '100%', margin:'5px', float: 'right' }}
 					placeholder="海报类别"
 					defaultValue={[]}
 					allowClear
@@ -343,8 +344,8 @@ class WaterfallSampleComponent extends React.Component {
 				>
 					{this.state.typelaber}
 				</Select>
-				<Input style={{ width: '100%', margin:'5px'}} allowClear  placeholder="名 字" onChange={this.onNameChange} />
-				<Button type="primary" onClick={this.submit} style={{}}>
+				<Input style={{ width: '100%', margin:'5px', float: 'right'}} allowClear  placeholder="名 字" onChange={this.onNameChange} />
+				<Button type="primary" onClick={this.submit} style={{margin:'5px', float: 'right'}}>
 				  查询
 				</Button>
 				{/* <Search
